@@ -7,7 +7,7 @@ class BettingMethods(object):
 	def __init__(self, numplayers):
 		self.numplayers = numplayers
 		self.NetWinnings = np.zeros((numplayers))
-		self.BetProfile = [0, 0, 0, 0, 0, 0]
+		self.BetProfile = [0 for i in range(numplayers)] #Determines what betting method to use on each player.
 		self.verbose = False
 		if len(self.BetProfile) != self.numplayers: #debugging check
 			print "Error: mismatch between betting profile and player size"
@@ -75,7 +75,7 @@ class BettingMethods(object):
 			print H.StageBet
 		else: 
 			pass
-	
+#Betting method that always bets 10 units and will match any higher bet.
 	def SimpleBet(self, player, H, cantraise):
 		S = H.Stage
 		SB = int(np.amax(H.StageBet[:, S]))
@@ -86,7 +86,8 @@ class BettingMethods(object):
 				H.StageBet[player, S] = 10
 		elif cantraise == 1:
 			H.StageBet[player, S] = SB
-	
+#Betting method that will call if the bet is within a given range of predicted winning chances and fold or raise
+#otherwise
 	def LinearBet(self, player, H, cantraise):
 		if H.VictoryChance[player, H.Stage] == 0:
 			H.MCAnalysis(100, player)
