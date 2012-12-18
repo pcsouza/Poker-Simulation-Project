@@ -29,7 +29,8 @@ class PlayHand(object):
 		self.Stage = 0
 		self.StageBet = np.zeros((numplayers, 4))
 		self.verbose = False
-		
+
+#Random card assignment function. Used for dealing cards in hand play.
 	def RnAssignCard(self, player, cardpos):
 		if cardpos < 2:
 			if self.Hands[player, cardpos, 0] == 0:
@@ -48,7 +49,8 @@ class PlayHand(object):
 				C = rn.choice(self.CardPop)
 				self.Hands[:, cardpos] = C
 				self.CardPop.remove(C)
-				
+
+#Insert card C at a given card position in the game. Used in initializing win chance calculations.
 	def DetAssignCard(self, player, cardpos, C):
 		if C[0] == 0:
 			pass
@@ -106,7 +108,9 @@ class PlayHand(object):
 		for i in range(1, 7):
 			self.RnAssignCard(self.players[0], i)
 		self.Stage = 3
-	
+
+#Computes the victory matrix of the hand where the first column is unitary to signify one game played and the
+#second is one or zero to signify a victory or loss. Ties are handled by multiple players recieving a victory tag
 	def SetVictory(self):
 		self.Victory[:,0] = 1
 		Ranks = np.zeros((self.numplayers, 6), dtype = np.ndarray)
@@ -139,7 +143,8 @@ class PlayHand(object):
 		self.Winnings += self.Victory[:,1]*np.sum(self.CurrentBets)/np.sum(self.Victory[:,1])
 		
 		
-			
+#Calculate the chances from the perspective of a given player of winning the hand assuming all current players stay
+#in the game.
 	def MCAnalysis(self, iter, player):
 		V = np.zeros((2), int)
 		for E in range(iter):
