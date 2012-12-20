@@ -3,11 +3,11 @@
 
 import Game
 import numpy as np
-import pylab
-import matplotlib.mlab as mlab
+
 print "Main"
 
+#Simple demonstration of the framework
 G = Game.Game(6)
-G.BetProfile[0] = 1
+G.BetProfile = [1, 1, 1, 1, 1, 1]
 G.verbose = True
 G.PlayHand()

@@ -2,12 +2,18 @@ import Game, Hand
 import numpy as np
 import sys
 
+#Class method for betting. Bets at different stages have their own methods to allow
+#for expansion into unique methods for each stage of the game.
 class BettingMethods(object):
 	
 	def __init__(self, numplayers):
 		self.numplayers = numplayers
 		self.NetWinnings = np.zeros((numplayers))
+<<<<<<< HEAD
 		self.BetProfile = [0 for i in range(numplayers)] #Determines what betting method to use on each player.
+=======
+		self.BetProfile = [0 for i in range(self.numplayers)] #Default betting behaviour
+>>>>>>> Documentation and Linear Tweaks
 		self.verbose = False
 		if len(self.BetProfile) != self.numplayers: #debugging check
 			print "Error: mismatch between betting profile and player size"
@@ -86,8 +92,14 @@ class BettingMethods(object):
 				H.StageBet[player, S] = 10
 		elif cantraise == 1:
 			H.StageBet[player, S] = SB
+<<<<<<< HEAD
 #Betting method that will call if the bet is within a given range of predicted winning chances and fold or raise
 #otherwise
+=======
+			
+#Bets with a linear proportion to the chances of winning with a fold/raise threshold
+#inversely proportional to the number of players in the game still.	
+>>>>>>> Documentation and Linear Tweaks
 	def LinearBet(self, player, H, cantraise):
 		if H.VictoryChance[player, H.Stage] == 0:
 			H.MCAnalysis(100, player)
@@ -97,13 +109,13 @@ class BettingMethods(object):
 		S = H.Stage
 		SB = int(np.amax(H.StageBet[:, S]))
 		if cantraise == 0:
-			if 100*C < (SB - 5):
+			if 100*C < (SB - 100/(len(H.players)*2)):
 				H.players.remove(player)
 				if self.verbose == True:
 					print "Player", player, "folds"
 				else:
 					pass
-			elif 100*C > (SB + 5):
+			elif 100*C > (SB + 100/(len(H.players)*2)):
 				H.StageBet[player, S] = int(100*C)
 				if self.verbose == True:
 					print "Player", player, "bets", H.StageBet[player, S]
@@ -116,7 +128,7 @@ class BettingMethods(object):
 				else:
 					pass
 		elif cantraise == 1:
-			if 100*C < (SB - 5):
+			if 100*C < (SB - 100/(len(H.players)*2)):
 				H.players.remove(player)
 				if self.verbose == True:
 					print "Player", player, "folds"
@@ -130,7 +142,8 @@ class BettingMethods(object):
 					pass
 				
 			 
-	
+#Monte Carlo analysis of the hand to produce a given player's percieved chances
+#of winning (aka. all other player's cards are randomized) 	
 	def MCAnalysis(players, Hand, iter, player):
 		V = np.zeros((3), int)
 		for E in range(iter):

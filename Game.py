@@ -4,6 +4,10 @@
 import numpy as np
 import Hand, Betting
 
+#Game object. This contains the main method to run a hand which is called repeatedly
+#to play the game.
+#Contains its own betting method so multiple game objects can be initialized with unique
+#betting patterns
 class Game(object):
 	
 	def __init__(self, numplayers):
